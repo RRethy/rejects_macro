@@ -23,7 +23,9 @@ pub fn rejects(item: proc_macro::TokenStream) -> proc_macro::TokenStream {
     match rejects::rejects::Rejects::new(&pat.value()) {
         Ok(re) => {
             expanded.append_all(quote! {
-                #re
+                fn foobarbaz() -> rejects::rejects::Rejects {
+                    #re
+                }
             });
         }
         Err(v) => {
