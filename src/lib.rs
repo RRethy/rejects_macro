@@ -16,16 +16,14 @@ impl Parse for RejectsPattern {
     }
 }
 
-#[proc_macro]
-pub fn rejects(item: proc_macro::TokenStream) -> proc_macro::TokenStream {
+#[proc_macro_hack::proc_macro_hack]
+pub fn make_rejects(item: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let RejectsPattern { pat } = parse_macro_input!(item as RejectsPattern);
     let mut expanded = proc_macro2::TokenStream::new();
     match rejects::rejects::Rejects::new(&pat.value()) {
         Ok(re) => {
             expanded.append_all(quote! {
-                fn foobarbaz() -> rejects::rejects::Rejects {
-                    #re
-                }
+                #re
             });
         }
         Err(v) => {
